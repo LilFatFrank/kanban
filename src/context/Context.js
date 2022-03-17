@@ -1,11 +1,12 @@
 import { createContext, useState } from "react";
 import { v4 as uuid } from "uuid";
-import { initialState } from "../utils/Constants";
+import { initialState, initialArchivedState } from "../utils/Constants";
 
 export const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
   const [data, setData] = useState(initialState());
+  const [archivedCards, setArchivedCards] = useState(initialArchivedState());
 
   const addMoreCard = (title, listId) => {
     if (!title) {
@@ -31,7 +32,7 @@ export const AppContextProvider = ({ children }) => {
     setData(newState);
     localStorage.setItem("dataKanban", JSON.stringify(newState));
   };
-  const removeCard = (index, listId) => {
+  const removeCard = (index, listId, card) => {
     const list = data?.lists[listId];
 
     list.cards.splice(index, 1);
@@ -43,6 +44,17 @@ export const AppContextProvider = ({ children }) => {
         [listId]: list
       }
     };
+
+    const archivedState = [
+      ...archivedCards,
+      {
+        ...card,
+        listId
+      }
+    ];
+
+    setArchivedCards(archivedState);
+    localStorage.setItem("archivedDataKanban", JSON.stringify(archivedState));
     setData(newState);
     localStorage.setItem("dataKanban", JSON.stringify(newState));
   };
@@ -116,66 +128,6 @@ export const AppContextProvider = ({ children }) => {
     localStorage.setItem("dataKanban", JSON.stringify(newState));
   };
 
-  const onDragEnd = (result) => {
-    const { destination, source, draggableId, type } = result;
-
-    if (!destination) {
-      return;
-    }
-
-    if (type === "list") {
-      const newListIds = data?.listIds;
-
-      newListIds.splice(source.index, 1);
-      newListIds.splice(destination.index, 0, draggableId);
-
-      const newState = {
-        ...data,
-        listIds: newListIds
-      };
-      setData(newState);
-      localStorage.setItem("dataKanban", JSON.stringify(newState));
-
-      return;
-    }
-
-    const sourceList = data?.lists[source.droppableId];
-    const destinationList = data?.lists[destination.droppableId];
-    const draggingCard = sourceList.cards.filter(
-      (card) => card.id === draggableId
-    )[0];
-
-    if (source.droppableId === destination.droppableId) {
-      sourceList.cards.splice(source.index, 1);
-      destinationList.cards.splice(destination.index, 0, draggingCard);
-
-      const newState = {
-        ...data,
-        lists: {
-          ...data?.lists,
-          [sourceList.id]: destinationList
-        }
-      };
-      setData(newState);
-      localStorage.setItem("dataKanban", JSON.stringify(newState));
-    } else {
-      sourceList.cards.splice(source.index, 1);
-      destinationList.cards.splice(destination.index, 0, draggingCard);
-
-      const newState = {
-        ...data,
-        lists: {
-          ...data?.lists,
-          [sourceList.id]: sourceList,
-          [destinationList.id]: destinationList
-        }
-      };
-
-      setData(newState);
-      localStorage.setItem("dataKanban", JSON.stringify(newState));
-    }
-  };
-
   const providerValue = {
     addMoreCard,
     addMoreList,
@@ -184,7 +136,8 @@ export const AppContextProvider = ({ children }) => {
     updateCardTitle,
     deleteList,
     data,
-    setData
+    setData,
+    archivedCards,
   };
 
   return (

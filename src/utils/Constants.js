@@ -14,6 +14,9 @@ export const data = {
   listIds: ["list-1"]
 };
 
+export const archivedStorage = JSON.parse(
+  localStorage.getItem("archivedDataKanban")
+);
 export const dataStorage = JSON.parse(localStorage.getItem("dataKanban"));
 
 export const initialState = () => {
@@ -22,5 +25,13 @@ export const initialState = () => {
   } else {
     localStorage.setItem("dataKanban", JSON.stringify(data));
     return data;
+  }
+};
+
+export const initialArchivedState = () => {
+  if (archivedStorage) {
+    return archivedStorage;
+  } else {
+    return [];
   }
 };

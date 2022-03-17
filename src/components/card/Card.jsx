@@ -47,7 +47,7 @@ const Card = ({ card, index, listId }) => {
                 <p>{card.title}</p>
                 <button
                   onClick={() => {
-                    removeCard(index, listId);
+                    removeCard(index, listId, card);
                   }}
                 >
                   <DeleteOutline />

@@ -3,7 +3,7 @@ import { Collapse } from "@mui/material";
 import "./InputContainer.scss";
 import { InputCard } from "..";
 
-export default function InputContainer({ listId, type }) {
+const InputContainer = ({ listId, type }) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -20,4 +20,6 @@ export default function InputContainer({ listId, type }) {
       </Collapse>
     </div>
   );
-}
+};
+
+export default InputContainer;
