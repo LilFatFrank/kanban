@@ -23,14 +23,14 @@ export const AppContextProvider = ({ children }) => {
     };
 
     const column = data?.columns[columnId];
-    column.cards = [...column.cards, newCard];
+    column.cards = [newCard, ...column.cards];
 
     const newState = {
+      ...data,
       columns: {
         ...data?.columns,
         [columnId]: column
-      },
-      ...data
+      }
     };
     setData(newState);
     localStorage.setItem("dataKanban", JSON.stringify(newState));

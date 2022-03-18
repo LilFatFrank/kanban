@@ -53,6 +53,7 @@ const Card = ({ card, index, columnId }) => {
             ) : openDescription ? (
               <TextareaAutosize
                 type="text"
+                placeholder="Description"
                 className="input-card-title"
                 value={newDescription}
                 onChange={(e) => setNewDescription(e.target.value)}
