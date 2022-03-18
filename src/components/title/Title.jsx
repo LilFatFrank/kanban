@@ -1,13 +1,20 @@
-import { MoreVert } from "@mui/icons-material";
+import { Delete } from "@mui/icons-material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
+} from "@mui/material";
 import React, { useContext, useState } from "react";
-import ClickOutHandler from "react-onclickout";
 import { AppContext } from "../../context/Context";
 import "./Title.scss";
 
 const Title = ({ title, columnId, noOfCards }) => {
   const [open, setOpen] = useState(false);
-  const [openOptions, setOpenOptions] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
+  const [openDialog, setOpenDialog] = useState(false);
   const { updateColumnTitle, deleteColumn } = useContext(AppContext);
 
   const handleOnBlur = () => {
@@ -44,38 +51,37 @@ const Title = ({ title, columnId, noOfCards }) => {
           </h2>
           <button
             className="column-button"
-            onClick={() => setOpenOptions(!openOptions)}
+            onClick={() =>
+              noOfCards ? setOpenDialog(true) : deleteColumn(columnId)
+            }
           >
-            <MoreVert />
+            <Delete />
           </button>
-          {openOptions ? (
-            <ClickOutHandler
-              onClickOut={(e) => {
-                setOpenOptions(!openOptions);
-              }}
-            >
-              <ul className="menu-card">
-                <li
-                  onClick={() => {
-                    setOpenOptions(!openOptions);
-                    deleteColumn(columnId);
-                  }}
-                >
-                  Delete column
-                </li>
-                <li
-                  onClick={() => {
-                    setOpenOptions(!openOptions);
-                    setOpen(!open);
-                  }}
-                >
-                  Edit column title
-                </li>
-              </ul>
-            </ClickOutHandler>
-          ) : null}
         </div>
       )}
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Are you sure?</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            You will lose all column data
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)}>No</Button>
+          <Button
+            onClick={() => deleteColumn(columnId)}
+            variant="contained"
+            autoFocus
+          >
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
