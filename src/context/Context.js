@@ -89,9 +89,9 @@ export const AppContextProvider = ({ children }) => {
       cards: []
     };
     const newState = {
-      columnIds: [...data?.columnIds, newColumnId],
+      columnIds: [...data?.columnIds || [], newColumnId],
       columns: {
-        ...data?.columns,
+        ...data?.columns || {},
         [newColumnId]: newColumn
       }
     };
