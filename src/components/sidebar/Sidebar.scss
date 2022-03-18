@@ -1,0 +1,10 @@
+@import "../../styles/mixins.scss";
+
+.sidebar {
+  padding: 20px;
+  @include flex(column, flex-start, center, 20px);
+  .cards {
+    width: 100%;
+    @include flex(column, flex-start, center, 10px);
+  }
+}

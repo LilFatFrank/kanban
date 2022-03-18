@@ -1,0 +1,14 @@
+@import "../../styles/mixins.scss";
+
+.filter {
+  @include flex(row, center, center, 5px);
+  cursor: pointer;
+}
+.filter:hover {
+  svg {
+    fill: var(--link-color);
+  }
+  h6 {
+    color: var(--link-color);
+  }
+}
