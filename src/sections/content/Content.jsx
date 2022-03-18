@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { InputContainer, List } from "../../components";
+import { InputContainer, Column } from "../../components";
 import { AppContext } from "../../context/Context";
 import "./Content.scss";
 
@@ -14,15 +14,15 @@ const Content = () => {
       return;
     }
 
-    if (type === "list") {
-      const newListIds = data?.listIds;
+    if (type === "column") {
+      const newColumnIds = data?.columnIds;
 
-      newListIds.splice(source.index, 1);
-      newListIds.splice(destination.index, 0, draggableId);
+      newColumnIds.splice(source.index, 1);
+      newColumnIds.splice(destination.index, 0, draggableId);
 
       const newState = {
         ...data,
-        listIds: newListIds
+        columnIds: newColumnIds
       };
       setData(newState);
       localStorage.setItem("dataKanban", JSON.stringify(newState));
@@ -30,35 +30,35 @@ const Content = () => {
       return;
     }
 
-    const sourceList = data?.lists[source.droppableId];
-    const destinationList = data?.lists[destination.droppableId];
-    const draggingCard = sourceList.cards.filter(
+    const sourceColumn = data?.columns[source.droppableId];
+    const destinationColumn = data?.columns[destination.droppableId];
+    const draggingCard = sourceColumn.cards.filter(
       (card) => card.id === draggableId
     )[0];
 
     if (source.droppableId === destination.droppableId) {
-      sourceList.cards.splice(source.index, 1);
-      destinationList.cards.splice(destination.index, 0, draggingCard);
+      sourceColumn.cards.splice(source.index, 1);
+      destinationColumn.cards.splice(destination.index, 0, draggingCard);
 
       const newState = {
         ...data,
-        lists: {
-          ...data?.lists,
-          [sourceList.id]: destinationList
+        columns: {
+          ...data?.columns,
+          [sourceColumn.id]: destinationColumn
         }
       };
       setData(newState);
       localStorage.setItem("dataKanban", JSON.stringify(newState));
     } else {
-      sourceList.cards.splice(source.index, 1);
-      destinationList.cards.splice(destination.index, 0, draggingCard);
+      sourceColumn.cards.splice(source.index, 1);
+      destinationColumn.cards.splice(destination.index, 0, draggingCard);
 
       const newState = {
         ...data,
-        lists: {
-          ...data?.lists,
-          [sourceList.id]: sourceList,
-          [destinationList.id]: destinationList
+        columns: {
+          ...data?.columns,
+          [sourceColumn.id]: sourceColumn,
+          [destinationColumn.id]: destinationColumn
         }
       };
 
@@ -69,20 +69,20 @@ const Content = () => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="app" type="list" direction="horizontal">
+      <Droppable droppableId="app" type="column" direction="horizontal">
         {(provided) => (
           <div
             className="wrapper"
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-            {data?.listIds.map((listId, index) => {
-              const list = data?.lists[listId];
+            {data?.columnIds?.map((columnId, index) => {
+              const column = data?.columns[columnId];
 
-              return <List list={list} key={listId} index={index} />;
+              return <Column column={column} key={columnId} index={index} />;
             })}
             <div>
-              <InputContainer type="list" />
+              <InputContainer type="column" />
             </div>
             {provided.placeholder}
           </div>

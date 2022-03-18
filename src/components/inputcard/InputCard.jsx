@@ -3,8 +3,8 @@ import { Clear } from "@mui/icons-material";
 import "./InputCard.scss";
 import { AppContext } from "../../context/Context";
 
-const InputCard = ({ setOpen, listId, type }) => {
-  const { addMoreCard, addMoreList } = useContext(AppContext);
+const InputCard = ({ setOpen, columnId, type }) => {
+  const { addMoreCard, addMoreColumn } = useContext(AppContext);
   const [title, setTitle] = useState("");
 
   const handleOnChange = (e) => {
@@ -13,9 +13,9 @@ const InputCard = ({ setOpen, listId, type }) => {
 
   const handleBtnConfirm = () => {
     if (type === "card") {
-      addMoreCard(title, listId);
+      addMoreCard(title, columnId);
     } else {
-      addMoreList(title);
+      addMoreColumn(title);
     }
     setOpen(false);
     setTitle("");
@@ -31,14 +31,14 @@ const InputCard = ({ setOpen, listId, type }) => {
           placeholder={
             type === "card"
               ? "Enter a title of this card..."
-              : "Enter list title"
+              : "Enter column title"
           }
           autoFocus
         />
       </div>
       <div className="confirm">
         <button className="button-confirm" onClick={handleBtnConfirm}>
-          {type === "card" ? "Add Card" : "Add List"}
+          {type === "card" ? "Add Card" : "Add Column"}
         </button>
         <button
           className="button-cancel"

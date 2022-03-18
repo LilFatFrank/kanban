@@ -8,7 +8,7 @@ export const AppContextProvider = ({ children }) => {
   const [data, setData] = useState(initialState());
   const [archivedCards, setArchivedCards] = useState(initialArchivedState());
 
-  const addMoreCard = (title, listId) => {
+  const addMoreCard = (title, columnId) => {
     if (!title) {
       return;
     }
@@ -16,41 +16,44 @@ export const AppContextProvider = ({ children }) => {
     const newCardId = uuid();
     const newCard = {
       id: newCardId,
-      title
+      title,
+      description: "",
+      status: "open",
+      createdDate: new Date().toLocaleDateString()
     };
 
-    const list = data?.lists[listId];
-    list.cards = [...list.cards, newCard];
+    const column = data?.columns[columnId];
+    column.cards = [...column.cards, newCard];
 
     const newState = {
-      ...data,
-      lists: {
-        ...data?.lists,
-        [listId]: list
-      }
+      columns: {
+        ...data?.columns,
+        [columnId]: column
+      },
+      ...data
     };
     setData(newState);
     localStorage.setItem("dataKanban", JSON.stringify(newState));
   };
-  const removeCard = (index, listId, card) => {
-    const list = data?.lists[listId];
+  const removeCard = (index, columnId, card) => {
+    const column = data?.columns[columnId];
 
-    list.cards.splice(index, 1);
+    column.cards.splice(index, 1);
 
     const newState = {
       ...data,
-      lists: {
-        ...data?.lists,
-        [listId]: list
+      columns: {
+        ...data?.columns,
+        [columnId]: column
       }
     };
 
     const archivedState = [
-      ...archivedCards,
       {
         ...card,
-        listId
-      }
+        column: data?.columns[columnId]?.title
+      },
+      ...archivedCards
     ];
 
     setArchivedCards(archivedState);
@@ -59,51 +62,52 @@ export const AppContextProvider = ({ children }) => {
     localStorage.setItem("dataKanban", JSON.stringify(newState));
   };
 
-  const updateCardTitle = (title, index, listId) => {
-    const list = data?.lists[listId];
-    list.cards[index].title = title;
+  const updateCardDetail = (detail, val, index, columnId) => {
+    const column = data?.columns[columnId];
+    column.cards[index][detail] = val;
 
     const newState = {
       ...data,
-      lists: {
-        ...data?.lists,
-        [listId]: list
+      columns: {
+        ...data?.columns,
+        [columnId]: column
       }
     };
     setData(newState);
     localStorage.setItem("dataKanban", JSON.stringify(newState));
   };
-  const addMoreList = (title) => {
+
+  const addMoreColumn = (title) => {
     if (!title) {
       return;
     }
 
-    const newListId = uuid();
-    const newList = {
-      id: newListId,
+    const newColumnId = uuid();
+    const newColumn = {
+      id: newColumnId,
       title,
       cards: []
     };
     const newState = {
-      listIds: [...data?.listIds, newListId],
-      lists: {
-        ...data?.lists,
-        [newListId]: newList
+      columnIds: [...data?.columnIds, newColumnId],
+      columns: {
+        ...data?.columns,
+        [newColumnId]: newColumn
       }
     };
     setData(newState);
     localStorage.setItem("dataKanban", JSON.stringify(newState));
   };
 
-  const updateListTitle = (title, listId) => {
-    const list = data?.lists[listId];
-    list.title = title;
+  const updateColumnTitle = (title, columnId) => {
+    const column = data?.columns[columnId];
+    column.title = title;
 
     const newState = {
       ...data,
-      lists: {
-        ...data?.lists,
-        [listId]: list
+      columns: {
+        ...data?.columns,
+        [columnId]: column
       }
     };
 
@@ -111,17 +115,17 @@ export const AppContextProvider = ({ children }) => {
     localStorage.setItem("dataKanban", JSON.stringify(newState));
   };
 
-  const deleteList = (listId) => {
-    const lists = data?.lists;
-    const listIds = data?.listIds;
+  const deleteColumn = (columnId) => {
+    const columns = data?.columns;
+    const columnIds = data?.columnIds;
 
-    delete lists[listId];
+    delete columns[columnId];
 
-    listIds.splice(listIds.indexOf(listId), 1);
+    columnIds.splice(columnIds.indexOf(columnId), 1);
 
     const newState = {
-      lists: lists,
-      listIds: listIds
+      columns: columns,
+      columnIds: columnIds
     };
 
     setData(newState);
@@ -130,14 +134,14 @@ export const AppContextProvider = ({ children }) => {
 
   const providerValue = {
     addMoreCard,
-    addMoreList,
-    updateListTitle,
+    addMoreColumn,
+    updateColumnTitle,
     removeCard,
-    updateCardTitle,
-    deleteList,
+    updateCardDetail,
+    deleteColumn,
     data,
     setData,
-    archivedCards,
+    archivedCards
   };
 
   return (

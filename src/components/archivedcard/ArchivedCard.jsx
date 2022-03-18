@@ -1,13 +1,14 @@
 import { Box, Typography } from "@mui/material";
 import "./ArchivedCards.scss";
 
-const ArchivedCard = ({ title, listId }) => {
+const ArchivedCard = ({ title, description, columnId }) => {
   return (
     <Box component="div" className="card">
-      <Typography variant="subtitle1">{title}</Typography>
+      <Typography variant="h6">{title}</Typography>
+      <Typography variant="body2">{description}</Typography>
       <Typography variant="body2">
-        <b>From list: </b>
-        {listId}
+        <b>From column: </b>
+        {columnId}
       </Typography>
     </Box>
   );

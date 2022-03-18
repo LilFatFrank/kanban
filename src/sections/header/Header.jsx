@@ -17,6 +17,8 @@ const Header = () => {
             alt={"Terra Logo"}
             width={40}
             height={40}
+            style={{ cursor: "pointer" }}
+            onClick={() => window.open("https://terra.money", "_blank")}
           />
           <Box
             component="div"
@@ -24,7 +26,7 @@ const Header = () => {
             onClick={() => setOpenMenu(true)}
           >
             <Sprite id="hamburg" width={18} height={18} />
-            <Typography variant={"subtitle1"}>Menu</Typography>
+            <Typography variant={"subtitle1"}>Archived Cards</Typography>
           </Box>
         </Toolbar>
       </AppBar>

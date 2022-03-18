@@ -1,17 +1,20 @@
 export const data = {
-  lists: {
-    "list-1": {
-      id: "list-1",
-      title: "Test List",
+  columns: {
+    "column-1": {
+      id: "column-1",
+      title: "Test Column",
       cards: [
         {
           id: "1",
-          title: "Test Card"
+          title: "Test Card",
+          description: "Test Description",
+          status: "open",
+          createdDate: new Date().toLocaleDateString()
         }
       ]
     }
   },
-  listIds: ["list-1"]
+  columnIds: ["column-1"]
 };
 
 export const archivedStorage = JSON.parse(

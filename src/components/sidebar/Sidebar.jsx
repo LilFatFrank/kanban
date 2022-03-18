@@ -5,7 +5,7 @@ import { AppContext } from "../../context/Context";
 import "./Sidebar.scss";
 
 const Sidebar = ({ open, onClose }) => {
-  const { data, archivedCards } = useContext(AppContext);
+  const { archivedCards } = useContext(AppContext);
 
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
@@ -17,15 +17,21 @@ const Sidebar = ({ open, onClose }) => {
           style={{ transform: "rotate(180deg)", cursor: "pointer" }}
           onClick={onClose}
         />
-        <Typography variant="h5">Archived Cards</Typography>
         <div className="cards">
-          {archivedCards.map((card) => (
-            <ArchivedCard
-              key={card.id}
-              title={card.title}
-              listId={data?.lists[card.listId]?.title}
-            />
-          ))}
+          {archivedCards?.length ? (
+            archivedCards?.map((card) => (
+              <ArchivedCard
+                key={card.id}
+                description={card.description}
+                title={card.title}
+                columnId={card.column}
+              />
+            ))
+          ) : (
+            <Typography variant="body2">
+              Currently, no archived cards.
+            </Typography>
+          )}
         </div>
       </Box>
     </Drawer>

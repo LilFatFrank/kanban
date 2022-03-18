@@ -4,14 +4,14 @@ import ClickOutHandler from "react-onclickout";
 import { AppContext } from "../../context/Context";
 import "./Title.scss";
 
-const Title = ({ title, listId }) => {
+const Title = ({ title, columnId, noOfCards }) => {
   const [open, setOpen] = useState(false);
   const [openOptions, setOpenOptions] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
-  const { updateListTitle, deleteList } = useContext(AppContext);
+  const { updateColumnTitle, deleteColumn } = useContext(AppContext);
 
   const handleOnBlur = () => {
-    updateListTitle(newTitle, listId);
+    updateColumnTitle(newTitle, columnId);
     setOpen(!open);
   };
 
@@ -39,15 +39,16 @@ const Title = ({ title, listId }) => {
       ) : (
         <div className="editable-title-container">
           <h2 onClick={() => setOpen(!open)} className="editable-title">
+            <span>{noOfCards}</span>
             {title}
           </h2>
           <button
-            className="list-button"
+            className="column-button"
             onClick={() => setOpenOptions(!openOptions)}
           >
             <MoreVert />
           </button>
-          {openOptions && (
+          {openOptions ? (
             <ClickOutHandler
               onClickOut={(e) => {
                 setOpenOptions(!openOptions);
@@ -57,10 +58,10 @@ const Title = ({ title, listId }) => {
                 <li
                   onClick={() => {
                     setOpenOptions(!openOptions);
-                    deleteList(listId);
+                    deleteColumn(columnId);
                   }}
                 >
-                  Delete list
+                  Delete column
                 </li>
                 <li
                   onClick={() => {
@@ -68,11 +69,11 @@ const Title = ({ title, listId }) => {
                     setOpen(!open);
                   }}
                 >
-                  Edit list title
+                  Edit column title
                 </li>
               </ul>
             </ClickOutHandler>
-          )}
+          ) : null}
         </div>
       )}
     </>

@@ -14,7 +14,13 @@
 .editable-title-container {
   position: relative;
   display: flex;
-
+  span {
+    background: var(--gray-3);
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 10px;
+    margin-right: 2px;
+  }
   .editable-title {
     height: 1.7rem;
 
@@ -23,7 +29,7 @@
     font-weight: bold;
   }
 
-  .list-button {
+  .column-button {
     height: 1.5rem;
     border: none;
 

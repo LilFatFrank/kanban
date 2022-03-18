@@ -5,3 +5,10 @@
   justify-content: $justify;
   gap: $gap;
 }
+
+@mixin ellipsis {
+  width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
